@@ -19,6 +19,31 @@ The `SKILL.md` file serves as the index with metadata, structure, and links.
 
 ---
 
+## 🚀 How I'm using Skills in Cursor
+
+1. Install uv:
+   ```bash
+   brew install uv
+   ```
+
+2. Install the [claude-skills-mcp](https://github.com/K-Dense-AI/claude-skills-mcp) server — use the "Add to Cursor" button
+
+3. Create the skills directory:
+   ```bash
+   mkdir -p ~/.claude/skills
+   ```
+
+4. Clone this repository into the skills folder:
+   ```bash
+   git clone https://github.com/nonameplum/agent-skills ~/.claude/skills/
+   ```
+
+5. In Cursor chat, type `list_skills` — first run will download RAG models (may take a moment)
+
+6. Retry after models are downloaded. Skills are now available! 🎉
+
+---
+
 ## 🛠️ DocC Converter
 
 This repository includes `swift_docc_to_skill.py` — a tool to convert Apple's DocC documentation format into the skill format used here.
