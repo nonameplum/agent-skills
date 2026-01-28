@@ -138,7 +138,4 @@ import HealthKitUI
 - Avoid samples longer than 24 hours; many types have duration limits.
 - Correlations store contained samples internally—don't save them separately.
 - Use `HKDeletedObject` via anchored queries to detect deletions.
-- For workout heart rate zones, use `HKWorkoutActivity` and route samples.Message Łukasz Śliwiński.p-ia4_client--huddle-workspace-in-sidebar {
-				--huddlesWorkspaceHeight: 0px;
-			}
-		Open in split viewHow was the audio and video?
+- For workout heart rate zones, use `HKWorkoutActivity` and route samples.

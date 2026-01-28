@@ -12,6 +12,7 @@ description: Apple Core Bluetooth framework for BLE and Bluetooth Classic. Use f
 - Use `corebluetooth/PerformingCommonPeripheralRoleTasks.md` for step-by-step peripheral workflows.
 - Use `corebluetooth/BestPracticesforInteractingwithaRemotePeripheralDevice.md` and `corebluetooth/BestPracticesforSettingUpYourLocalDeviceasaPeripheral.md` for pitfalls and best practices.
 - Use `corebluetooth/CoreBluetoothBackgroundProcessingforiOSApps.md` for background modes and lifecycle constraints.
+- Use `corebluetooth/BluetoothStateRestorationAppReaunchRules.md` for state restoration app relaunch rules.
 - Use `corebluetooth/corebluetooth.md` for API quick maps and symbol lookup.
 
 ## Workflow
