@@ -8,6 +8,7 @@ description: AccessorySetupKit for privacy-preserving discovery and setup of Blu
 ## What to open
 
 - Use `accessory-setup-kit/accessorysetupkit.md` for all API details and key names.
+- Use `accessory-setup-kit/AccessorySetupKitEverythingBLEDevelopersNeedToKnow.md` for BLE-specific behavior notes and real-world details.
 - Search within it for: "Discovering and configuring accessories", `ASAccessorySession`, `ASDiscoveryDescriptor`, `ASPickerDisplayItem`, `ASMigrationDisplayItem`, `ASPickerDisplaySettings`, and `ASAccessoryEventType`.
 
 ## Workflow
