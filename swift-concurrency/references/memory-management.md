@@ -209,7 +209,21 @@ viewModel = nil
 
 ### Solution 2: Weak self with guard
 
+For `for await` loops over long-lived/infinite streams, capture `self` **inside** the loop body.
+Do not unwrap `self` once at task start, because that creates a strong reference for the whole task lifetime.
+
 ```swift
+// ❌ Avoid: strong capture for entire stream lifetime
+task = Task { [weak self] in
+    guard let self else { return }
+    for await event in eventStream {
+        self.handle(event)
+    }
+}
+```
+
+```swift
+// ✅ Preferred: unwrap each iteration
 func startObserving() {
     task = Task { [weak self] in
         for await _ in NotificationCenter.default.notifications(
@@ -402,6 +416,27 @@ Task {
 Task {
     for await item in stream {
         self.process(item) // May never release
+    }
+}
+```
+
+### ❌ Unwrapping weak self before async stream loop
+
+```swift
+Task { [weak self] in
+    guard let self else { return } // Strong capture lasts for entire loop
+    for await item in stream {
+        self.process(item)
+    }
+}
+```
+
+```swift
+// ✅ Unwrap per iteration instead
+Task { [weak self] in
+    for await item in stream {
+        guard let self else { return }
+        self.process(item)
     }
 }
 ```

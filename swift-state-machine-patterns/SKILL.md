@@ -9,7 +9,7 @@ description: Build type-safe Swift state machines with enum states and action-ba
 - Reentrancy-sensitive flows
 - Protocol or lifecycle logic with strict transition rules
 - Async streams or continuations that need cancellation safety
-- Concurrency boundaries where invalid state must be unrepresentable
+- Boundaries where invalid state must be unrepresentable
 
 ## Core rules
 1) Model state as an enum with associated values. Each case carries only data
@@ -146,8 +146,35 @@ Notes:
 - Model terminal outcomes with a `Termination` enum (e.g., finished vs failed).
 - Return optional actions when an event produces no side effects.
 
+## SwiftNIO-derived refinements
+From `NIOTypedHTTPClientUpgraderStateMachine` and `NIOTypedHTTPClientUpgradeHandler`:
+
+1. Keep the handler/coordinator and state machine strictly separated.
+   - State machine: pure transitions + typed actions only.
+   - Handler/coordinator: executes effects (pipeline mutation, async callbacks/futures, promise completion).
+
+2. Use phase-specific states for transient workflow steps.
+   - Example shape: `.awaitingResponseHead -> .awaitingResponseEnd -> .upgrading -> .unbuffering -> .finished`.
+   - Encode buffered payload directly in state-associated data instead of side channels.
+
+3. Prefer small action enums per event over one giant action enum.
+   - Example: `ChannelActiveAction`, `WriteAction`, `ChannelReadAction`.
+   - This narrows allowed effects and makes illegal combinations unrepresentable.
+
+4. Use explicit “internal inconsistency” traps for impossible paths.
+   - Invariant violations should fail fast (`preconditionFailure` / `fatalError`) in debug paths.
+   - Recoverable protocol/runtime errors should be returned as typed actions/errors, not traps.
+
+5. Model pipeline/IO backpressure states explicitly.
+   - When async upgrade/mutation is in-flight, transition to a buffering state and append reads.
+   - After completion, transition to unbuffering and drain deterministically.
+
+6. Represent teardown/removal as a first-class event.
+   - Add a dedicated `handlerRemoved`/`terminated` event with explicit action to fail pending promises/tasks.
+   - This prevents dangling continuations when lifecycle ends unexpectedly.
+
 ## Examples
-### Channel-style rendezvous
+### Channel-style
 ```swift
 struct ChannelStateMachine<Element: Sendable> {
   private struct SuspendedProducer: Hashable {
